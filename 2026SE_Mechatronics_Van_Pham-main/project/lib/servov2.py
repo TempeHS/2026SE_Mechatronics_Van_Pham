@@ -1,0 +1,80 @@
+import time
+from servo import Servo
+from machine import Pin, PWM
+from PiicoDev_Ultrasonic import PiicoDev_Ultrasonic
+from PiicoDev_Unified import sleep_ms
+
+# create a PWM servo controller (16 - pin Pico)
+class RobotGO:
+    def __init__(self):
+        self.servo_pwm = PWM(Pin(16))
+        self.servo_pwm2 = PWM(Pin(18))
+
+        self.side = PiicoDev_Ultrasonic(id=[0, 0, 0, 0])
+        self.front = PiicoDev_Ultrasonic(id=[0, 0, 1, 0])
+# Set the parameters of the servo pulses, more details in the "Documentation" section
+        self.freq = 50
+        self.min_us = 500
+        self.max_us = 2500
+        self.dead_zone_us = 1500
+        self.ninedeg_turn = 2.6437
+# create a servo object
+        self.my_servo = Servo(pwm=self.servo_pwm, min_us=self.min_us, max_us=self.max_us, dead_zone_us=self.dead_zone_us, freq=self.freq
+)
+
+        self.my_servo2 = Servo(pwm=self.servo_pwm2, min_us=self.min_us, max_us=self.max_us, dead_zone_us=self.dead_zone_us, freq=self.freq
+)
+
+    def forward(self):
+        self.my_servo.set_duty(1850)
+        self.my_servo2.set_duty(1150)
+        time.sleep(2)
+
+    def right(self):
+        self.my_servo.set_duty(1608)
+        self.my_servo2.set_duty(1608)
+        time.sleep(self.ninedeg_turn)
+        self.my_servo.stop()
+        self.my_servo2.stop()
+        time.sleep(2)
+
+    def left(self):
+        self.my_servo.set_duty(1387)
+        self.my_servo2.set_duty(1387)
+        time.sleep(self.ninedeg_turn)
+        self.my_servo.stop()
+        self.my_servo2.stop()
+        time.sleep(2)
+
+    def back(self):
+        self.my_servo.set_duty(1150)
+        self.my_servo2.set_duty(1850)
+        time.sleep(2)
+        self.my_servo.stop()
+        self.my_servo2.stop()
+
+    def stop(self):
+        self.my_servo.stop()
+        self.my_servo2.stop()
+
+    def ultrarun(self):
+        front = self.front.distance_mm
+        side = self.side.distance_mm
+        print(f"{front}, {side}")
+        time.sleep(1)
+
+
+    def run(self):
+        while True:
+            self.forward()
+            self.ultrarun()
+            if self.front.distance_mm < 200 and self.side.distance_mm > 300:
+                self.stop()
+                print("RIGHT")
+                time.sleep(2)
+                self.right()
+            elif self.front.distance_mm < 200 and self.side.distance_mm < 300:
+                self.stop()
+                print("LEFT")
+                time.sleep(2)
+                self.left()

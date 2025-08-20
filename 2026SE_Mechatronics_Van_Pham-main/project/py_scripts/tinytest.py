@@ -7,8 +7,8 @@ from PiicoDev_Unified import sleep_ms
 # create a PWM servo controller (16 - pin Pico)
 servo_pwm = PWM(Pin(16))
 servo_pwm2 = PWM(Pin(18))
-range_a = PiicoDev_Ultrasonic(id=[0, 0, 0, 0])
-range_b = PiicoDev_Ultrasonic(id=[0, 0, 1, 0])
+side = PiicoDev_Ultrasonic(id=[0, 0, 0, 0])
+front = PiicoDev_Ultrasonic(id=[0, 0, 1, 0])
 # Set the parameters of the servo pulses, more details in the "Documentation" section
 freq = 50
 min_us = 500
@@ -21,13 +21,12 @@ my_servo = Servo(pwm=servo_pwm, min_us=min_us, max_us=max_us, dead_zone_us=dead_
 
 my_servo2 = Servo(pwm=servo_pwm2, min_us=min_us, max_us=max_us, dead_zone_us=dead_zone_us, freq=freq
 )
-servo_pwm = PWM(Pin(16))
-servo_pwm2 = PWM(Pin(18))
+
 
 
 def forward():
-    my_servo.set_duty(2500)
-    my_servo2.set_duty(500)
+    my_servo.set_duty(1700)
+    my_servo2.set_duty(1300)
     time.sleep(2)
 
 def right():
@@ -58,16 +57,25 @@ def stop():
     my_servo2.stop()
 
 def ultrarun():
-    while True:
-        print(f"{range_a.distance_mm}, {range_b.distance_mm}")
-        sleep_ms(100)
+        print(f"{front.distance_mm}, {side.distance_mm}")
+        time.sleep_ms(1)
 
 def testing():
-    forward()
-    ultrarun()
-    if range_b <= "500":
-        left()
-    stop()
+    while True:
+        forward()
+        ultrarun()
+        if front.distance_mm < 200 and side.distance_mm > 200:
+            print("RIGHT")
+            stop()
+            time.sleep(2)
+            right()
+        elif front.distance_mm < 200 and side.distance_mm < 200:
+            print("LEFT")
+            stop()
+            time.sleep(2)
+            left()
 
-left()
+
+
+time.sleep(1)
 testing()
