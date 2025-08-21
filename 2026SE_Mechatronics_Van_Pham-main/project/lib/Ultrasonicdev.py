@@ -26,4 +26,4 @@ class Ultrasonic:
 
 ultrarun = Ultrasonic()
 
-ultrarun.ultrarun()
+ultrarun.run()
