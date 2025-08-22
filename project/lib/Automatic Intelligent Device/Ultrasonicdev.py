@@ -11,19 +11,20 @@ class Ultrasonic:
         front = self.front.distance_mm
         side = self.side.distance_mm
         print(f"{front}, {side}")
+        sleep_ms(250)
 
 
 
     def run(self):
-        while True:
             self.ultrarun()
             if self.front.distance_mm < 200 and self.side.distance_mm > 300:
                 print("RIGHT")
-                time.sleep(2)
+                time.sleep(1)
             elif self.front.distance_mm < 200 and self.side.distance_mm < 300:
                 print("LEFT")
-                time.sleep(2)
+                time.sleep(1)
 
-ultrarun = Ultrasonic()
-
-ultrarun.run()
+if __name__ == "__main__":
+    ultrarun = Ultrasonic()
+    while True:
+        ultrarun.ultrarun()

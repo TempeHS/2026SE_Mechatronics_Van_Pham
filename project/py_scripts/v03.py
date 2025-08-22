@@ -35,11 +35,11 @@ my_servo = Servo(
 
 while True:
     # manually set the servo duty time
-    my_servo.set_duty(500)
+    my_servo.set_duty(2500)
+    time.sleep(2)
+
+    my_servo.set_duty(1600)
     time.sleep(2)
 
     my_servo.set_duty(1500)
-    time.sleep(2)
-
-    my_servo.stop()
     time.sleep(2)

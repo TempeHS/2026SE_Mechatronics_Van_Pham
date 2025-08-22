@@ -24,12 +24,12 @@ class RobotGO():
     def forward(self):
         self.my_servo.set_duty(1850)
         self.my_servo2.set_duty(1150)
-        print("asdadas")
-        time.sleep(2)
+
 
     def right(self):
         self.my_servo.set_duty(1608)
         self.my_servo2.set_duty(1608)
+        print("Right")
         time.sleep(self.ninedeg_turn)
         self.my_servo.stop()
         self.my_servo2.stop()
@@ -38,10 +38,15 @@ class RobotGO():
     def left(self):
         self.my_servo.set_duty(1387)
         self.my_servo2.set_duty(1387)
+        print("Left")
         time.sleep(self.ninedeg_turn)
         self.my_servo.stop()
         self.my_servo2.stop()
         time.sleep(2)
+
+    def spin(self):
+        self.my_servo.set_duty(1600)
+        self.my_servo2.set_duty(1800)
 
     def back(self):
         self.my_servo.set_duty(1150)
@@ -54,30 +59,5 @@ class RobotGO():
         self.my_servo.stop()
         self.my_servo2.stop()
 
-    def ultrarun(self):
-        front = self.front.distance_mm
-        side = self.side.distance_mm
-        print(f"{front}, {side}")
 
-
-
-    def run(self):
-        while True:
-            self.forward()
-            self.ultrarun()
-            if self.front.distance_mm < 200 and self.side.distance_mm > 300:
-                self.stop()
-                print("RIGHT")
-                time.sleep(2)
-                self.right()
-            elif self.front.distance_mm < 200 and self.side.distance_mm < 300:
-                self.stop()
-                print("LEFT")
-                time.sleep(2)
-                self.left()
-
-wheels = RobotGO()
-
-
-wheels.run()
-
+robot = RobotGO()
